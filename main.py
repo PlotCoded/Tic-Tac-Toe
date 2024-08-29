@@ -4,6 +4,7 @@ import Backend
 
 game = ctk.CTk()
 game.geometry("600x400")
+game.title("Tic-Tac-Toe")
 
 #Applying a theme of the game: Don't worry about this part
 #ctk.set_default_color_theme("Theme.json")

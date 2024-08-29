@@ -8,6 +8,7 @@ class TwoPlayers:
 		self.player_o = []
 		self.game_over_message = ""
 		self.guide_message = ""
+		self.result_found = False
 
 	def play(self, grid):
 		#The if  and elif statement condition checks if the player to play if X or O.
@@ -28,22 +29,24 @@ class TwoPlayers:
 			self.guide_message = f"It is player {self.turn}'s turn now"
 
 		#Checking if we have a winner/loser/a draw for player X
+		#Note: self.result_found is to prevent the program from checking other combinations that aren't a straight line particularly for "player_o"
 		for _ in list(combinations(self.player_x, 3)):
 			if sorted(list(_)) in self.possibilities:
 				self.game_over_message = "X wins"
-				print(self.game_over_message)
-			elif (len(self.player_x) + len(self.player_o)) == 9:
+				self.result_found = True
+				break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
+			elif (len(self.player_x) + len(self.player_o)) == 9 and (sorted(list(_)) not in self.possibilities):
 				self.game_over_message = "We have a draw"
-				print(self.game_over_message)
+				self.result_found = True
 
 		#Checking if we have a winner/loser/a draw for player O
 		for _ in list(combinations(self.player_o, 3)):
-			if sorted(list(_)) in self.possibilities:
-				self.game_over_message = "O wins"
-				print(self.game_over_message)
-			elif (len(self.player_x) + len(self.player_o)) == 9:
-				self.game_over_message = "We have a draw"
-				print(self.game_over_message)
+			if self.result_found == False:
+				if sorted(list(_)) in self.possibilities:
+					self.game_over_message = "O wins"
+					break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
+				elif (len(self.player_x) + len(self.player_o)) == 9 and (sorted(list(_)) not in self.possibilities):
+					self.game_over_message = "We have a draw"
 
 class SinglePlayer:
 	def __init__(self, player="X", computer="O",level="Easy"):
