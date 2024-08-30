@@ -41,7 +41,7 @@ class TwoPlayers:
 
 		#Checking if we have a winner/loser/a draw for player O
 		for _ in list(combinations(self.player_o, 3)):
-			if self.result_found == False:
+			if self.result_found == False: #If we didn't find a straight line(a win) in "player's choices"
 				if sorted(list(_)) in self.possibilities:
 					self.game_over_message = "O wins"
 					break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
@@ -49,86 +49,102 @@ class TwoPlayers:
 					self.game_over_message = "We have a draw"
 
 class SinglePlayer:
-	def __init__(self, player="X", computer="O",level="Easy"):
-		self.player = player.upper()
-		self.computer = computer
+	def __init__(self, level="Easy"):
 		self.possibilities = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
 		self.player_choices = []
 		self.computer_choices = []
+		self.result_found = False
 
-		if self.player not in ("X","O"):
-			raise Exception("Player's Letter' must be 'X' or 'O'")
+		# if self.player not in ("X","O"):
+		# 	raise Exception("Player's Letter' must be 'X' or 'O'")
 
-	def PlayersTurn(self, player_number_choice):
-		if player_number_choice not in tuple(range(1,10)):
-			raise Exception("'player_number_choice' must be in range of (1-9)")
+	def playersTurn(self, grid):
+		if grid not in tuple(range(1,10)):
+			raise Exception("'grid' must be in range of (1-9)")
 
-		#This exception doesn't check for invalid input, but check if a player has
-		#picked a number that has bee choosesn by the computer or themselves
-		if player_number_choice in self.player_choices or player_number_choice in self.computer_choices:
-			raise KeyError(f'This number {player_number_choice} has been choosen')
+		#This exception checks if a player has picked a number that has been choosen
+		#by the computer or themselves(the player)
+		if grid in self.player_choices or grid in self.computer_choices:
+			raise KeyError(f'This number {grid} has been choosen')
 
-		self.player_number_choice = player_number_choice
-		self.player_choices.append(self.player_number_choice)
+		self.player_choices.append(grid)
 
-		self.Result()
+		self.result()
 
-	def ComputersTurn(self):
+	def computersTurn(self):
 		def computer_guess():
-			self.computer_number_choice = randint(1,9)
+			#Here, the "grid" is actually a box(number) picked by the computer at random
+			global grid
+			grid = randint(1,9)
 
-			if self.computer_number_choice in self.computer_choices or self.computer_number_choice in self.player_choices:
-				computer_guess()
+			if grid in self.computer_choices or grid in self.player_choices:
+				computer_guess() #Run(guess) again if the number has been picked by the player or the computer previously
 		computer_guess()
 
-		self.computer_choices.append(self.computer_number_choice)
+		self.computer_choices.append(grid)
 
-		self.Result()
+		self.result()
 
-	def Result(self):
+	def result(self):
 		self.players_outcomes = list(combinations(sorted(self.player_choices), 3))
 		self.computer_outcomes = list(combinations(sorted(self.computer_choices), 3))
 	
-		self.result = 'It\'s a draw'
+		#Checking if we have a winner/loser/a draw for Player/User
+		#Note: self.result_found is to prevent the program from checking other combinations that aren't a straight line particularly for "computers_choices"
+		for _ in list(combinations(self.player_choices, 3)):
+			if sorted(list(_)) in self.possibilities:
+				self.game_over_message = "Player wins"
+				self.result_found = True
+				break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
+			elif (len(self.player_choices) + len(self.computer_choices)) == 9 and (sorted(list(_)) not in self.possibilities):
+				self.game_over_message = "We have a draw"
+				self.result_found = True
 
-		for line in self.computer_outcomes:
-			for lane in self.possibilities:
-				if list(line) == lane:
-					self.result = 'You lose'
-					self.scores["player"]+=1
-					self.result_founded = True
-					break
-
-		for line in self.players_outcomes:
-			for lane in self.possibilities:
-				if list(line)  == lane:
-					self.result = 'You win'
-					self.scores["computer"]+=1
-					self.result_founded = True
-					break
-
-	def Delete(self):
-		if len(self.player_choices) > 1:
-			del self.player_choices[len(self.player_choices)-1]
-		if len(self.computer_choices) > 1:
-			del self.computer_choices[len(self.computer_choices)-1]
+		#Checking if we have a winner/loser/a draw for Computer
+		for _ in list(combinations(self.computer_choices, 3)):
+			if self.result_found == False: #If we didn't find a straight line(a win) in "player's choices"
+				if sorted(list(_)) in self.possibilities:
+					self.game_over_message = "O wins"
+					break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
+				elif (len(self.player_choices) + len(self.computer_choices)) == 9 and (sorted(list(_)) not in self.possibilities):
+					self.game_over_message = "We have a draw"
 
 if __name__ == "__main__":
-	two_players = TwoPlayers()
-	two_players.play(20)
-	print(two_players.guide_message)
-	two_players.play(8)
-	print(two_players.guide_message)
-	two_players.play(1)
-	print(two_players.guide_message)
-	two_players.play(4)
-	print(two_players.guide_message)
-	two_players.play(3)
-	print(two_players.guide_message)
-	two_players.play(5)
-	print(two_players.guide_message)
-	print(two_players.player_x, two_players.player_o)
-	print(two_players.game_over_message)
+	if False:
+		#Testing the "TwoPlayer" class
+		two_players = TwoPlayers()
+		two_players.play(2)
+		print(two_players.guide_message)
+		two_players.play(8)
+		print(two_players.guide_message)
+		two_players.play(1)
+		print(two_players.guide_message)
+		two_players.play(4)
+		print(two_players.guide_message)
+		two_players.play(3)
+		print(two_players.guide_message)
+		two_players.play(5)
+		print(two_players.guide_message)
+		print(two_players.player_x, two_players.player_o)
+		print(two_players.game_over_message)
 
-"""To find accurate information about this source code and its details, try the HTML Documentation
-in this folder"""
+	else:
+		#Testing the "SinglePlayer" class
+		single_player = SinglePlayer()
+		single_player.playersTurn(1)
+		print(single_player.player_choices)
+		single_player.computersTurn()
+		print(single_player.computer_choices)
+		single_player.playersTurn(3)
+		print(single_player.player_choices)
+		single_player.computersTurn()
+		print(single_player.computer_choices)
+		single_player.playersTurn(5)
+		print(single_player.player_choices)
+		single_player.computersTurn()
+		print(single_player.computer_choices)
+		single_player.playersTurn(9)
+		print(single_player.player_choices)
+		single_player.computersTurn()
+		print(single_player.computer_choices)
+		print(single_player.game_over_message)

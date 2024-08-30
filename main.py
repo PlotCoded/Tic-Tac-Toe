@@ -61,6 +61,8 @@ class TwoPlayer:
 		self.button8.grid(row=2,column=1)
 		self.button9.grid(row=2,column=2)
 
+		self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]
+
 		#These boolean variables tell if it's X's or O's turn to play
 		self.x_turn = True
 		self.o_turn = False
@@ -119,8 +121,6 @@ class TwoPlayer:
 			
 		#Updating the guide message based on the user input(the button he/she clicks). If it is X's turn or O's turn
 		self.guide.configure(text=self.backend.guide_message)
-
-		self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]
 		
 		if self.backend.game_over_message == "X wins":
 			#Displaying the game over message, quit, play again and back button accurately
@@ -196,10 +196,23 @@ class Computer:
 		self.x_o_frame = ctk.CTkFrame(self.game)
 		self.x_o_frame.pack(pady=30)
 
+		def radio_command():
+			#Knowing what letter the player/user chooses
+			if self.x_o_var.get():
+				self.player = "player O"
+				self.opponent = "player X"
+				print("Choose O")
+			else:
+				print("Choose X")
+				self.player = "player X"
+				self.opponent = "player O"
+
 		#Creating X or O buttons
 		self.x_o_var = tk.IntVar(value=0)
-		self.play_x = ctk.CTkRadioButton(self.x_o_frame, text="Play X", value=0, variable=self.x_o_var)
-		self.play_o = ctk.CTkRadioButton(self.x_o_frame, text="Play O", value=1, variable=self.x_o_var)
+		self.play_x = ctk.CTkRadioButton(self.x_o_frame, text="Play with X", value=0, variable=self.x_o_var, command=radio_command)
+		self.play_o = ctk.CTkRadioButton(self.x_o_frame, text="Play with O", value=1, variable=self.x_o_var, command=radio_command)
+
+		radio_command() #The reason why i am running this function here is to make sure that "self.player" is the right option(X or O) choosen by the user when ever the user presses "Back","Play Again" or "Quit" buttons
 
 		#Displaying the buttons
 		self.play_x.pack(side="left", padx=40)
@@ -209,7 +222,7 @@ class Computer:
 		self.levels()
 
 	def levels(self):
-		self.levels_var = tk.StringVar(value="Easy")
+		self.levels_var = tk.StringVar(value="Hard")
 		self.levelsMenu = ctk.CTkOptionMenu(self.game, variable=self.levels_var, values=["Easy", "Medium","Hard","Impossible"])
 		self.levelsMenu.pack(pady=30)
 
@@ -242,7 +255,7 @@ class Computer:
 		self.levelsMenu.pack_forget()
 		self.cancelOrNextFrame.pack_forget()
 
-		#Displaying the grid, quit button, play again button, etc
+		#Displaying the "grid frame", "quit" button, "play again" button, etc
 		self.ttt()
 
 	def ttt(self): #ttt --> Tic-Tac-Toe
@@ -251,6 +264,32 @@ class Computer:
 
 		self.guide = ctk.CTkLabel(self.game, text="Click a grid to play")
 		self.guide.pack()
+		
+		self.seconds = 3.3
+		if self.levels_var.get() == "Hard" or self.levels_var.get() == "Impossible":
+			self.timer_label = ctk.CTkLabel(self.game, text=f"Timer: {self.seconds} seconds left for {self.player}")
+
+			global countdown
+			def countdown():
+				if self.seconds > 0: #If the seconds are not over
+					self.seconds-=0.1
+					self.timer_label.configure(text=f"Timer: {abs(round(self.seconds,2))} seconds left for {self.player}")
+					game.after(100, countdown)
+				else: #If the seconds are over
+					self.timer_label.pack_forget()
+					#Game over for the user. A bit harsh but that's what the user choose
+					#Displaying the game over message, quit, play again and back button accurately
+					self.game_over_message.configure(text="Computer wins")
+					self.game_over_message.pack()
+					self.quit_button.pack_forget()
+					self.play_again_button.pack(side="left")
+					self.back_button.pack(side="left")
+
+					#Starting the timer
+					self.seconds = 3.3
+			
+			self.timer_label.pack()
+			countdown()
 
 		#Creating a grid to display the buttons: These button are what the user will click to display "X" or "O"
 		self.grid_frame = ctk.CTkFrame(self.game)
@@ -282,12 +321,14 @@ class Computer:
 		self.button8.grid(row=2,column=1)
 		self.button9.grid(row=2,column=2)
 
+		self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]
+
 		#These boolean variables tell if it's X's or O's turn to play based on the selection of the radiobutton "play_x" and "play_o"
 		self.x_turn = bool(self.x_o_var.get() == self.play_x.cget("value"))
 		self.o_turn = bool(self.x_o_var.get()  == self.play_o.cget("value"))
 
 		self.game_over_frame = ctk.CTkFrame(self.game)
-		self.game_over_frame.pack()
+		self.game_over_frame.pack();
 
 		self.game_over_message = ctk.CTkLabel(self.game_over_frame, text=f"Game Over: It's a tie")
 
@@ -305,10 +346,33 @@ class Computer:
 		game.geometry("600x400")
 
 		self.guide.pack_forget()
+		self.timer_label.pack_forget()
 		self.grid_frame.pack_forget()
 		self.game_over_frame.pack_forget()
 
 	def buttonClicked(self, button):
+		#Setting up the timer to the opponent
+		self.seconds = 0 #Setting the timer to 0 seconds. It's purpose is to allow it to restart
+		if self.levels_var.get() == "Hard" or self.levels_var.get() == "Impossible":
+			countdown()
+
+		#Redisplaying the widgets accurately because the widgets disappeared and got rearranged after the seconds was 0
+		self.grid_frame.pack_forget()
+		self.game_over_frame.pack_forget()
+		self.game_over_message.pack_forget()
+		self.play_again_button.pack_forget()
+		self.back_button.pack_forget()
+		
+		#Reseting the display message of the timer
+		if self.levels_var.get() == "Hard" or self.levels_var.get() == "Impossible":
+			self.timer_label.configure(text=f"Timer: {abs(round(self.seconds))} seconds left for {self.player}")
+			self.timer_label.pack()
+		
+		#Redisplaying the widgets again
+		self.grid_frame.pack()
+		self.game_over_frame.pack()
+		self.quit_button.pack(side="left")
+
 		#Changing the text to "X" or "O" if it's X's turn or O's turn
 		if self.x_turn:
 			button.configure(text="X")
@@ -328,13 +392,20 @@ class Computer:
 			self.o_turn = False
 
 			button.configure(text="O")
-			button.configure(state="disabled")	
+			button.configure(state="disabled")
+
+		#Processing the game input to determine a winner/loser/draw
+
+		#Disabling the buttons so the user can't click an empty box while after the game is over and change the content to "X" or "O"
 
 	def quit(self):
 		#Asking the user if he actually wants to quit
 		quit = tk.messagebox.askyesno(title="Quit", message="Are you sure you want to quit?")
 
 		if quit: #If they want to quit
+			#Reseting the timer
+			self.seconds = 0
+
 			self.forgetTTT()
 			self.choice()
 
