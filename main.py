@@ -121,7 +121,8 @@ class TwoPlayer:
 			
 		#Updating the guide message based on the user input(the button he/she clicks). If it is X's turn or O's turn
 		self.guide.configure(text=self.backend.guide_message)
-		
+			
+		#If we have a result(win, lose, draw)
 		if self.backend.game_over_message == "X wins":
 			#Displaying the game over message, quit, play again and back button accurately
 			self.game_over_message.pack()
@@ -201,9 +202,7 @@ class Computer:
 			if self.x_o_var.get():
 				self.player = "player O"
 				self.opponent = "player X"
-				print("Choose O")
 			else:
-				print("Choose X")
 				self.player = "player X"
 				self.opponent = "player O"
 
@@ -279,7 +278,7 @@ class Computer:
 					self.timer_label.pack_forget()
 					#Game over for the user. A bit harsh but that's what the user choose
 					#Displaying the game over message, quit, play again and back button accurately
-					self.game_over_message.configure(text="Computer wins")
+					self.game_over_message.configure(text=self.backend.game_over_message)
 					self.game_over_message.pack()
 					self.quit_button.pack_forget()
 					self.play_again_button.pack(side="left")
@@ -339,14 +338,29 @@ class Computer:
 
 		self.back_button = ctk.CTkButton(self.game_over_frame, text="Back", command=self.back)
 
-		#Run computer if only O is True because the computer has to start first because it is X
+		#Initializing the backend
+		self.backend = Backend.SinglePlayer(self.levels_var.get())
+
+		#Run computer if only the player is O and "self.o_turn" is True because the computer has to start first because it is X
+		if self.o_turn:
+			#Running computer
+			self.backend.computersTurn()
+
+			#Getting the button the computer picked
+			button = self.buttons[self.backend.grid-1]
+
+			#Changing the text of the button to "X" and disabling the buttons
+			button.configure(text="X")
+			button.configure(state="disabled")
 
 	def forgetTTT(self):
 		#Changing the size of the window to its original size
 		game.geometry("600x400")
 
 		self.guide.pack_forget()
-		self.timer_label.pack_forget()
+		if self.levels_var.get() == "Hard" or self.levels_var.get() == "Impossible":
+			#I am doing this because in "Easy" and "Medium" mode, the timer is never created so the computer will not recognise this variable
+			self.timer_label.pack_forget()
 		self.grid_frame.pack_forget()
 		self.game_over_frame.pack_forget()
 
@@ -373,30 +387,98 @@ class Computer:
 		self.game_over_frame.pack()
 		self.quit_button.pack(side="left")
 
+		#Note: "grid" is just to get the last number on its name in other to tell us which grid was pressed
+		grid = str(button)[-1]
+		if grid == "n":
+			grid = 1 #I did this because if you try to get the last thing on the string "grid" if you clicked the first button, it will be "n" not 1
+		else:
+			grid = int(grid)
+
 		#Changing the text to "X" or "O" if it's X's turn or O's turn
 		if self.x_turn:
 			button.configure(text="X")
 			button.configure(state="disabled")
 
-			#Making it O's turn next after playing X of course
-			self.x_turn = False
-			self.o_turn = True
+			#Player's Turn
+			self.backend.playersTurn(grid)
 
-			#buttonClicked function must be run again to run the Computer in the elif statement
-
-		elif self.o_turn:
 			#Running computer
+			#If there is no results founded
+			if self.backend.game_over_message == "Computer Wins":
+				self.backend.computersTurn()
 
-			#Making it X's turn next after playing O of course
-			self.x_turn = True
-			self.o_turn = False
+			#getting the button the computer picked
+			button = self.buttons[self.backend.grid-1]
 
+			#Changing the text of the button to "X" and disabling the buttons
 			button.configure(text="O")
 			button.configure(state="disabled")
 
-		#Processing the game input to determine a winner/loser/draw
+		elif self.o_turn:
+			button.configure(text="O")
+			button.configure(state="disabled")
 
-		#Disabling the buttons so the user can't click an empty box while after the game is over and change the content to "X" or "O"
+			#Player's Turn
+			self.backend.playersTurn(grid)
+
+			#Running computer
+			#If there is no results founded
+			if self.backend.game_over_message == "Computer Wins":
+				self.backend.computersTurn()
+
+			#Getting the button the computer picked
+			button = self.buttons[self.backend.grid-1]
+
+			#Changing the text of the button to "X" and disabling the buttons
+			button.configure(text="X")
+			button.configure(state="disabled")
+
+		#If we have a result(win, lose, draw)
+		if self.backend.game_over_message == "Player wins":
+			self.seconds = 0 #Reseting the timer
+
+			#Displaying the game over message, quit, play again and back button accurately
+			self.timer_label.pack_forget()
+			self.game_over_message.pack()
+			self.game_over_message.configure(text = self.backend.game_over_message)
+			self.quit_button.pack_forget()
+			self.play_again_button.pack(side="left")
+			self.back_button.pack(side="left")
+			self.timer_label.pack_forget()
+
+			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
+			for _ in self.buttons:
+				_.configure(state="disabled")
+
+		elif self.backend.game_over_message == "Computer wins":
+			self.seconds = 0 #Reseting the timer
+
+			#Displaying the game over message, play again and back button accurately
+			self.timer_label.pack_forget()
+			self.game_over_message.pack()
+			self.game_over_message.configure(text = self.backend.game_over_message)
+			self.quit_button.pack_forget()
+			self.play_again_button.pack(side="left")
+			self.back_button.pack(side="left")
+
+			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
+			for _ in self.buttons:
+				_.configure(state="disabled")
+
+		elif self.backend.game_over_message == "We have a draw":
+			self.seconds = 0 #Reseting the timer
+
+			#Displaying the game over message, quit, play again and back button accurately
+			self.timer_label.pack_forget()
+			self.game_over_message.pack()
+			self.game_over_message.configure(text = self.backend.game_over_message)
+			self.quit_button.pack_forget()
+			self.play_again_button.pack(side="left")
+			self.back_button.pack(side="left")
+			
+			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
+			for _ in self.buttons:
+				_.configure(state="disabled")
 
 	def quit(self):
 		#Asking the user if he actually wants to quit

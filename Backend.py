@@ -54,9 +54,14 @@ class SinglePlayer:
 		self.player_choices = []
 		self.computer_choices = []
 		self.result_found = False
+		self.game_over_message = "Computer Wins"
+		self.level = level
+		#Note: game over message here ("Computer Wins") is different from the final game over message "Computer wins"
+		#I did this to stop the timer, sort of, in "main.py". It is very confusing to explain and loads of text will be used to explain it
+		#So i didn't fully explain it but just wanted to state that out
 
-		# if self.player not in ("X","O"):
-		# 	raise Exception("Player's Letter' must be 'X' or 'O'")
+		if level not in ["Easy","Medium","Hard","Impossible"]:
+			raise Exception("Levels value must be 'Easy','Medium','Hard' or 'Impossible'")
 
 	def playersTurn(self, grid):
 		if grid not in tuple(range(1,10)):
@@ -74,14 +79,15 @@ class SinglePlayer:
 	def computersTurn(self):
 		def computer_guess():
 			#Here, the "grid" is actually a box(number) picked by the computer at random
-			global grid
-			grid = randint(1,9)
+			self.grid = randint(1,9) #Default mode which is "Easy" mode
 
-			if grid in self.computer_choices or grid in self.player_choices:
-				computer_guess() #Run(guess) again if the number has been picked by the player or the computer previously
+			if self.grid in self.computer_choices or self.grid in self.player_choices:
+				if len(self.computer_choices) + len(self.player_choices) < 9:
+					#This if block above is to prevent to computer from guessing a box(number) even if there are not boxes left or 1-9 are filled
+					computer_guess() #Run(guess) again if the number has been picked by the player or the computer previously
 		computer_guess()
 
-		self.computer_choices.append(grid)
+		self.computer_choices.append(self.grid)
 
 		self.result()
 
@@ -104,7 +110,7 @@ class SinglePlayer:
 		for _ in list(combinations(self.computer_choices, 3)):
 			if self.result_found == False: #If we didn't find a straight line(a win) in "player's choices"
 				if sorted(list(_)) in self.possibilities:
-					self.game_over_message = "O wins"
+					self.game_over_message = "Computer wins"
 					break #This break statement stops the loop and prevent the program from checking other combinations that aren't a straight line
 				elif (len(self.player_choices) + len(self.computer_choices)) == 9 and (sorted(list(_)) not in self.possibilities):
 					self.game_over_message = "We have a draw"
