@@ -32,23 +32,23 @@ class TwoPlayer:
 		self.guide.pack()
 
 		#Creating a grid to display the buttons: These button are what the user will click to display "X" or "O"
-		self.grid_frame = ctk.CTkFrame(self.game)
-		self.grid_frame.pack(expand=True, fill="both")
+		self.grid_frame = ctk.CTkFrame(self.game, fg_color="#e3e3e3")
+		self.grid_frame.pack(pady=20)
 
 		#Creating a grid layout in the "self.grid_frame" frame
 		self.grid_frame.rowconfigure(3)
 		self.grid_frame.columnconfigure(3)
 
 		#Creating each buttons
-		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1))
-		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2))
-		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3))
-		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4))
-		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5))
-		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6))
-		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7))
-		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8))
-		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9))
+		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1), height=50)
+		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2), height=50)
+		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3), height=50)
+		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4), height=50)
+		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5), height=50)
+		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6), height=50)
+		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7), height=50)
+		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8), height=50)
+		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9), height=50)
 
 		#Placing each button
 		self.button1.grid(row=0,column=0, sticky="nsew")
@@ -67,13 +67,13 @@ class TwoPlayer:
 		self.x_turn = True
 		self.o_turn = False
 
-		self.game_over_frame = ctk.CTkFrame(self.game)
-		self.game_over_frame.pack(expand=True, fill="both")
+		self.game_over_frame = ctk.CTkFrame(self.game, fg_color="#e3e3e3")
+		self.game_over_frame.pack()
 
 		self.game_over_message = ctk.CTkLabel(self.game_over_frame, text=f"Game Over: It's a tie")
 
 		self.quit_button = ctk.CTkButton(self.game_over_frame, text="Quit", command=self.quit)
-		self.quit_button.pack(expand=True)
+		self.quit_button.pack()
 
 		self.play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", command=self.play_again)
 
@@ -128,8 +128,8 @@ class TwoPlayer:
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
+			self.play_again_button.pack(side="left", padx=50)
+			self.back_button.pack(side="left",padx=50)
 
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
@@ -140,8 +140,8 @@ class TwoPlayer:
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
+			self.play_again_button.pack(side="left", padx=50)
+			self.back_button.pack(side="left", padx=50)
 
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
@@ -152,8 +152,8 @@ class TwoPlayer:
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
+			self.play_again_button.pack(side="left",padx=50)
+			self.back_button.pack(side="left",padx=50)
 
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
@@ -194,7 +194,7 @@ class Computer:
 		self.forgetButtons()
 
 		#Giving the player the choice to pick "x" or "o"  and the level to play against the computer and 
-		self.x_o_frame = ctk.CTkFrame(self.game)
+		self.x_o_frame = ctk.CTkFrame(self.game,fg_color="#e3e3e3")
 		self.x_o_frame.pack(pady=30)
 
 		def radio_command():
@@ -229,7 +229,7 @@ class Computer:
 		self.cancelOrNext()
 
 	def cancelOrNext(self):
-		self.cancelOrNextFrame = ctk.CTkFrame(self.game)
+		self.cancelOrNextFrame = ctk.CTkFrame(self.game, fg_color="#e3e3e3")
 		self.cancelOrNextFrame.pack(pady=30)
 
 		self.cancel_button = ctk.CTkButton(self.cancelOrNextFrame, text="Cancel", command=self.cancelFunc)
@@ -291,7 +291,7 @@ class Computer:
 			countdown()
 
 		#Creating a grid to display the buttons: These button are what the user will click to display "X" or "O"
-		self.grid_frame = ctk.CTkFrame(self.game)
+		self.grid_frame = ctk.CTkFrame(self.game, fg_color="#e3e3e3")
 		self.grid_frame.pack()
 
 		#Creating a grid layout in the "self.grid_frame" frame
@@ -299,15 +299,15 @@ class Computer:
 		self.grid_frame.columnconfigure(3)
 
 		#Creating each buttons
-		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1))
-		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2))
-		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3))
-		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4))
-		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5))
-		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6))
-		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7))
-		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8))
-		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9))
+		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1), height=50)
+		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2), height=50)
+		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3), height=50)
+		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4), height=50)
+		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5), height=50)
+		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6), height=50)
+		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7), height=50)
+		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8), height=50)
+		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9), height=50)
 
 		#Placing each button
 		self.button1.grid(row=0,column=0)
@@ -326,7 +326,7 @@ class Computer:
 		self.x_turn = bool(self.x_o_var.get() == self.play_x.cget("value"))
 		self.o_turn = bool(self.x_o_var.get()  == self.play_o.cget("value"))
 
-		self.game_over_frame = ctk.CTkFrame(self.game)
+		self.game_over_frame = ctk.CTkFrame(self.game, fg_color="#e3e3e3")
 		self.game_over_frame.pack();
 
 		self.game_over_message = ctk.CTkLabel(self.game_over_frame, text=f"Game Over: It's a tie")
@@ -437,14 +437,14 @@ class Computer:
 		if self.backend.game_over_message == "Player wins":
 			self.seconds = 0 #Reseting the timer
 
-			#Displaying the game over message, quit, play again and back button accurately
-			self.timer_label.pack_forget()
+			if self.levels_var.get() in ["Hard","Impossible"]:
+				#Displaying the game over message, quit, play again and back button accurately
+				self.timer_label.pack_forget()
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
-			self.timer_label.pack_forget()
+			self.play_again_button.pack(side="left", padx=50)
+			self.back_button.pack(side="left",padx=50)
 
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
@@ -453,13 +453,14 @@ class Computer:
 		elif self.backend.game_over_message == "Computer wins":
 			self.seconds = 0 #Reseting the timer
 
-			#Displaying the game over message, play again and back button accurately
-			self.timer_label.pack_forget()
+			if self.levels_var.get() in ["Hard","Impossible"]:
+				#Displaying the game over message, quit, play again and back button accurately
+				self.timer_label.pack_forget()
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
+			self.play_again_button.pack(side="left",padx=50)
+			self.back_button.pack(side="left",padx=50)
 
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
@@ -468,13 +469,14 @@ class Computer:
 		elif self.backend.game_over_message == "We have a draw":
 			self.seconds = 0 #Reseting the timer
 
-			#Displaying the game over message, quit, play again and back button accurately
-			self.timer_label.pack_forget()
+			if self.levels_var.get() in ["Hard","Impossible"]:
+				#Displaying the game over message, quit, play again and back button accurately
+				self.timer_label.pack_forget()
 			self.game_over_message.pack()
 			self.game_over_message.configure(text = self.backend.game_over_message)
 			self.quit_button.pack_forget()
-			self.play_again_button.pack(side="left")
-			self.back_button.pack(side="left")
+			self.play_again_button.pack(side="left", padx=50)
+			self.back_button.pack(side="left",padx=50)
 			
 			#Disabling all the buttons so the user doesn't input "X" or "O" after the game is over
 			for _ in self.buttons:
