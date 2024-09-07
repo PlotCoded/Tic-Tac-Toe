@@ -7,7 +7,7 @@ game.geometry("600x400")
 game.title("Tic-Tac-Toe")
 
 #Applying a theme of the game: Don't worry about this part
-#ctk.set_default_color_theme("Theme.json")
+ctk.set_default_color_theme("TTTTheme.json")
 
 class TwoPlayer:
 	def __init__(self, game):
@@ -33,33 +33,33 @@ class TwoPlayer:
 
 		#Creating a grid to display the buttons: These button are what the user will click to display "X" or "O"
 		self.grid_frame = ctk.CTkFrame(self.game)
-		self.grid_frame.pack()
+		self.grid_frame.pack(expand=True, fill="both")
 
 		#Creating a grid layout in the "self.grid_frame" frame
 		self.grid_frame.rowconfigure(3)
 		self.grid_frame.columnconfigure(3)
 
 		#Creating each buttons
-		self.button1 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button1))
-		self.button2 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button2))
-		self.button3 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button3))
-		self.button4 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button4))
-		self.button5 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button5))
-		self.button6 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button6))
-		self.button7 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button7))
-		self.button8 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button8))
-		self.button9 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button9))
+		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1))
+		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2))
+		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3))
+		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4))
+		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5))
+		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6))
+		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7))
+		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8))
+		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9))
 
 		#Placing each button
-		self.button1.grid(row=0,column=0)
-		self.button2.grid(row=0,column=1)
-		self.button3.grid(row=0,column=2)
-		self.button4.grid(row=1,column=0)
-		self.button5.grid(row=1,column=1)
-		self.button6.grid(row=1,column=2)
-		self.button7.grid(row=2,column=0)
-		self.button8.grid(row=2,column=1)
-		self.button9.grid(row=2,column=2)
+		self.button1.grid(row=0,column=0, sticky="nsew")
+		self.button2.grid(row=0,column=1, sticky="nsew")
+		self.button3.grid(row=0,column=2, sticky="nsew")
+		self.button4.grid(row=1,column=0, sticky="nsew")
+		self.button5.grid(row=1,column=1, sticky="nsew")
+		self.button6.grid(row=1,column=2, sticky="nsew")
+		self.button7.grid(row=2,column=0, sticky="nsew")
+		self.button8.grid(row=2,column=1, sticky="nsew")
+		self.button9.grid(row=2,column=2, sticky="nsew")
 
 		self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]
 
@@ -68,12 +68,12 @@ class TwoPlayer:
 		self.o_turn = False
 
 		self.game_over_frame = ctk.CTkFrame(self.game)
-		self.game_over_frame.pack()
+		self.game_over_frame.pack(expand=True, fill="both")
 
 		self.game_over_message = ctk.CTkLabel(self.game_over_frame, text=f"Game Over: It's a tie")
 
 		self.quit_button = ctk.CTkButton(self.game_over_frame, text="Quit", command=self.quit)
-		self.quit_button.pack(side="left")
+		self.quit_button.pack(expand=True)
 
 		self.play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", command=self.play_again)
 
@@ -299,15 +299,15 @@ class Computer:
 		self.grid_frame.columnconfigure(3)
 
 		#Creating each buttons
-		self.button1 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button1))
-		self.button2 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button2))
-		self.button3 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button3))
-		self.button4 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button4))
-		self.button5 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button5))
-		self.button6 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button6))
-		self.button7 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button7))
-		self.button8 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button8))
-		self.button9 = ctk.CTkButton(self.grid_frame,text="", command=lambda: self.buttonClicked(self.button9))
+		self.button1 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3", fg_color="#c3c3c3", command=lambda: self.buttonClicked(self.button1))
+		self.button2 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button2))
+		self.button3 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button3))
+		self.button4 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button4))
+		self.button5 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button5))
+		self.button6 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button6))
+		self.button7 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button7))
+		self.button8 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button8))
+		self.button9 = ctk.CTkButton(self.grid_frame,text="", corner_radius = 0, hover_color="#d3d3d3",fg_color="#c3c3c3",command=lambda: self.buttonClicked(self.button9))
 
 		#Placing each button
 		self.button1.grid(row=0,column=0)
